@@ -91,7 +91,7 @@ grep -qxF "$EXPORTS" /etc/environment || sudo echo -e "${EXPORTS}" >> /etc/envir
 echo "Contents of /etc/environment:"
 cat /etc/environment
 
-grep -qxF "apm_enabled: true" /etc/dd-agent/datadog.conf || sudo echo -e "apm_enabled: true" >> /etc/dd-agent/datadog.conf
+sed -i 's/# apm_enabled: false/apm_enabled: true/g' /etc/dd-agent/datadog.conf
 DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 # sudo service datadog-agent restart
 sudo apachectl restart
