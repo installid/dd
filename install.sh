@@ -83,12 +83,12 @@ then
 fi
 
 read -p "What is the shortest domain of this service this machine is running (eg: servicename.com)? [${DD_SERVICE_NAME}]: " servicename
-servicename=${servicename:-$DD_SERVICE_NAME}
+servicename=${servicename:-${DD_SERVICE_NAME}}
 EXPORTS="${EXPORTS}
 export DD_SERVICE_NAME=${servicename}"
 $EXPORTS
-echo $EXPORTS
-grep -qxF "DD_SERVICE_NAME" /etc/environment || sudo echo "${EXPORTS}" >> /etc/environment
+echo -e $EXPORTS
+grep -qxF "DD_SERVICE_NAME" /etc/environment || sudo echo -e "${EXPORTS}" >> /etc/environment
 echo "Contents of /etc/environment:"
 cat /etc/environment
 
