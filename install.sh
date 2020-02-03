@@ -63,7 +63,7 @@ cd /tmp
 
 URL=$( curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'http.*datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | cut -d '"' -f 2 )
 echo "Downloading ${URL}"
-curl -L -o datadog-php-tracer.rpm "${URL}"
+curl -s -L -o datadog-php-tracer.rpm "${URL}"
 
 sudo rpm -ivh datadog-php-tracer.rpm
 rm -f datadog-php-tracer.rpm
@@ -74,7 +74,7 @@ export DD_TRACE_ANALYTICS_ENABLED=true"
 IP=$( curl -s ipinfo.io | grep -E '"ip":' | cut -d '"' -f 4 )
 echo "External IP detected: ${IP}"
 
-DNS=$( curl https://api.hackertarget.com/reverseiplookup/?q=$IP )
+DNS=$( curl -s https://api.hackertarget.com/reverseiplookup/?q=$IP )
 echo "DNS detected: ${DNS}"
 
 if [ -z "${DD_SERVICE_NAME}" ]
