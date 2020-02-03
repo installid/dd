@@ -2,7 +2,6 @@
 # ddphp.install.id 1.0.0
 
 # Prepare error trapping.
-set -e
 function fdebug
 {
 	last_command=$current_command
@@ -68,6 +67,8 @@ curl -L -o datadog-php-tracer.rpm "${URL}"
 
 sudo rpm -ivh datadog-php-tracer.rpm
 rm -f datadog-php-tracer.rpm
+
+set -e
 
 EXPORTS=<<<EOT
 export DD_TRACE_CLI_ENABLED=true
