@@ -82,8 +82,7 @@ then
 	DD_SERVICE_NAME=$APP_NAME
 fi
 
-read -p "What is the shortest domain of this service this machine is running (eg: servicename.com)? [${DD_SERVICE_NAME}]: " servicename
-servicename=${servicename:-${DD_SERVICE_NAME}}
+read -p "What is the shortest domain of this service this machine is running (eg: servicename.com)? " servicename
 EXPORTS="${EXPORTS}
 export DD_SERVICE_NAME=${servicename}"
 $EXPORTS
