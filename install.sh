@@ -63,7 +63,7 @@ cd /tmp
 #curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | tr -d \" | wget -O datadog-php-tracer.rpm -qi -
 #curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | tr -d \" | curl -O datadog-php-tracer.rpm -
 URL=$( curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'http.*datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | cut -d '"' -f 2 )
-Echo "Downloading ${URL}"
+echo "Downloading ${URL}"
 curl -o datadog-php-tracer.rpm "${URL}"
 
 sudo rpm -ivh datadog-php-tracer.rpm
