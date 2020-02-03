@@ -68,7 +68,8 @@ curl -L -o datadog-php-tracer.rpm "${URL}"
 sudo rpm -ivh datadog-php-tracer.rpm
 rm -f datadog-php-tracer.rpm
 
-EXPORTS="export DD_TRACE_CLI_ENABLED=true\nexport DD_TRACE_ANALYTICS_ENABLED=true"
+EXPORTS="export DD_TRACE_CLI_ENABLED=true
+export DD_TRACE_ANALYTICS_ENABLED=true"
 
 IP=$( curl -s ipinfo.io | grep -E '"ip":' | cut -d '"' -f 4 )
 echo "External IP detected: ${IP}"
@@ -83,7 +84,8 @@ fi
 
 read -p "What is the shortest domain of this service this machine is running (eg: servicename.com)? [${DD_SERVICE_NAME}]: " servicename
 servicename=${servicename:-$DD_SERVICE_NAME}
-EXPORTS="${EXPORTS}\nexport DD_SERVICE_NAME=${servicename}"
+EXPORTS="${EXPORTS}
+export DD_SERVICE_NAME=${servicename}"
 $EXPORTS
 echo $EXPORTS
 grep -qxF "DD_SERVICE_NAME" /etc/environment || sudo echo "${EXPORTS}" >> /etc/environment
