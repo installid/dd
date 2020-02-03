@@ -59,8 +59,6 @@ fi
 
 cd /tmp
 
-#curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | tr -d \" | wget -O datadog-php-tracer.rpm -qi -
-#curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | tr -d \" | curl -O datadog-php-tracer.rpm -
 URL=$( curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'http.*datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | cut -d '"' -f 2 )
 echo "Downloading ${URL}"
 curl -L -o datadog-php-tracer.rpm "${URL}"
@@ -70,7 +68,7 @@ rm -f datadog-php-tracer.rpm
 
 set -e
 
-EXPORTS=<<<EOT
+read -r -d '' EXPORTS << EOT
 export DD_TRACE_CLI_ENABLED=true
 export DD_TRACE_ANALYTICS_ENABLED=true
 EOT
