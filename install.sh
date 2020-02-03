@@ -87,9 +87,12 @@ EXPORTS="${EXPORTS}
 export DD_SERVICE_NAME=${servicename}"
 $EXPORTS
 echo -e $EXPORTS
-grep -qxF "DD_SERVICE_NAME" /etc/environment || sudo echo -e "${EXPORTS}" >> /etc/environment
+grep -qxF "$EXPORTS" /etc/environment || sudo echo -e "${EXPORTS}" >> /etc/environment
 echo "Contents of /etc/environment:"
 cat /etc/environment
 
+grep -qxF "apm_enabled: true" /etc/dd-agent/datadog.conf || sudo echo -e "apm_enabled: true" >> /etc/dd-agent/datadog.conf
+DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+# sudo service datadog-agent restart
 sudo apachectl restart
 sudo service php-fpm restart
