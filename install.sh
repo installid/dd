@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # ddphp.install.id 1.0.0
+#
+# sudo su
+# bash <(curl -s https://ddphp.install.id)
 
 # set -e
 
@@ -91,8 +94,26 @@ grep -qxF "$EXPORTS" /etc/environment || sudo echo -e "${EXPORTS}" >> /etc/envir
 echo "Contents of /etc/environment:"
 cat /etc/environment
 
-sed -i 's/# apm_enabled: false/apm_enabled: true/g' /etc/dd-agent/datadog.conf
+# Newrelic would compete, kill it.
+rm -f /etc/php.d/newrelic.ini
+
+# Allow env variables to go into PHP-FPM
+# sudo sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
+
+# Shove the variables into FPM also.
+EXPORTSFPM="env[DD_TRACE_CLI_ENABLED] = true
+env[DD_TRACE_ANALYTICS_ENABLED] = true
+env[DD_SERVICE_NAME] = ${servicename}"
+grep -qxF "EXPORTSFPM" /etc/php-fpm.d/www.conf || sudo echo -e "${EXPORTSFPM}" >> /etc/php-fpm.d/www.conf
+
+# Enable APM
+sudo sed -i 's/# apm_enabled: false/apm_enabled: true/g' /etc/dd-agent/datadog.conf
+
+# Upgrade DD agent if needed.
 DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
-# sudo service datadog-agent restart
+
+# Restart services.
+sudo service datadog-agent restart
 sudo apachectl restart
 sudo service php-fpm restart
+sudo service nginx restart
