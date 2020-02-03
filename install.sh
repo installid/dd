@@ -68,10 +68,7 @@ rm -f datadog-php-tracer.rpm
 
 set -e
 
-read -r -d '' EXPORTS << EOT
-export DD_TRACE_CLI_ENABLED=true
-export DD_TRACE_ANALYTICS_ENABLED=true
-EOT
+EXPORTS="export DD_TRACE_CLI_ENABLED=true\nexport DD_TRACE_ANALYTICS_ENABLED=true"
 
 IP=$( curl -s ipinfo.io | grep -E '"ip":' | cut -d '"' -f 4 )
 echo "External IP detected: ${IP}"
