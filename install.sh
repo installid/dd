@@ -59,6 +59,11 @@ fi
 
 cd /tmp
 
+if [ ! -z "${DD_AGENT_MAJOR_VERSION}" ]
+then
+  DD_AGENT_MAJOR_VERSION=7
+fi
+
 if [ !-z $( which php ) ]
 then
   URL=$( curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'http.*datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | cut -d '"' -f 2 )
