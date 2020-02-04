@@ -84,7 +84,7 @@ if [ ! -z $( which ${DD_PLATFORM} 2>/dev/null ) ]
 then
   URL=$( curl -s "https://api.github.com/repos/DataDog/dd-trace-${DD_PLATFORM}/releases/latest" | grep -E "http.*datadog-${DD_PLATFORM}-tracer-.*\.x86_64\.rpm" | cut -d : -f 2,3 | cut -d '"' -f 2 )
   echo "Downloading ${URL}"
-  if [ -f datadog-${DD_PLATFORM}-tracer.rpm ]
+  if [ -f "datadog-${DD_PLATFORM}-tracer.rpm" ]
   then
     curl -s -L -o datadog-${DD_PLATFORM}-tracer.rpm "${URL}"
     sudo rpm -ivh datadog-${DD_PLATFORM}-tracer.rpm
