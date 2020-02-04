@@ -61,7 +61,7 @@ cd /tmp
 
 if [ ! -z "${DD_AGENT_MAJOR_VERSION}" ]
 then
-  DD_AGENT_MAJOR_VERSION=7
+  export DD_AGENT_MAJOR_VERSION=7
 fi
 
 if [ !-z $( which php ) ]
