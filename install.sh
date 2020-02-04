@@ -151,11 +151,24 @@ then
     EXPORTSFPM="env[DD_TRACE_CLI_ENABLED] = true
 env[DD_TRACE_ANALYTICS_ENABLED] = true
 env[DD_SERVICE_NAME] = ${DD_SERVICE_NAME}"
-    grep -qxF "EXPORTSFPM" /etc/php-fpm.d/www.conf || sudo echo -e "${EXPORTSFPM}" >> /etc/php-fpm.d/www.conf
+    grep -qxF "$EXPORTSFPM" /etc/php-fpm.d/www.conf || sudo echo -e "${EXPORTSFPM}" >> /etc/php-fpm.d/www.conf
     sudo service php-fpm restart
   fi
-fi
 
+  YAML="logs:"
+  for FOLDER in $( find /var -type d -name logs 2>/dev/null | grep storage/logs )
+  do
+    YAML="${YAML}
+
+  - type: file
+    path: '${FOLDER}/*'
+    service: php
+    source: php
+    sourcecategory: sourcecode
+"
+  done
+  grep -qxF "$YAML" /etc/php.d/conf.yaml || sudo echo -e "${EXPORTSFPM}" >> /etc/php.d/conf.yaml
+fi
 # Restart services.
 # sudo service datadog-agent restart
 sudo restart datadog-agent
