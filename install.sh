@@ -98,7 +98,7 @@ echo "DNS detected: ${DNS}"
 
 if [ ! -z "${DD_API_KEY}" ]
 then
-	bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+	DD_AGENT_MAJOR_VERSION=7 bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 fi
 
 if [ -z "${DD_SERVICE_NAME}" ]
@@ -125,7 +125,7 @@ sudo sed -i 's/# apm_enabled: false/apm_enabled: true/g' /etc/dd-agent/datadog.c
 # Upgrade DD agent if needed.
 if [ -z "${DD_API_KEY}" ]
 then
-  DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+  DD_AGENT_MAJOR_VERSION=7 DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 fi
 
 if [ "php" == "${DD_PLATFORM}" ]
