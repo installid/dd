@@ -167,7 +167,7 @@ env[DD_SERVICE_NAME] = ${DD_SERVICE_NAME}"
     sourcecategory: sourcecode
 "
   done
-  grep -qxF "$YAML" /etc/php.d/conf.yaml || sudo echo -e "${EXPORTSFPM}" >> /etc/php.d/conf.yaml
+  grep -qxF "$YAML" /etc/php.d/conf.yaml || sudo echo -e "${YAML}" >> /etc/php.d/conf.yaml
 fi
 # Restart services.
 # sudo service datadog-agent restart
