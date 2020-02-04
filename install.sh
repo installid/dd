@@ -21,16 +21,20 @@ function fdebug
 	last_command=$current_command
 	current_command=$BASH_COMMAND
 }
+function ferr
+{
+  echo -e "${RED}$1${NC}" && exit 1
+}
 function fexit
 {
-	if [ ! $? -eq 0 ]
+	if [ $? -neq 0 ]
 	then
 		echo -e "${RED}ERROR: Datadog installation was unable to complete. \"${last_command}\" returned $?.${NC}"
 	fi
-	if [ -d "$tmp" ]
-	then
-		rm -rf "$tmp"
-	fi
+  #	if [ -d "$tmp" ]
+  #	then
+  #		rm -rf "$tmp"
+  #	fi
 	if [ -f "$self" ]
 	then
 		shred -u "$self"
@@ -47,18 +51,15 @@ NC='\033[0m'
 # Check dependencies
 if [ -z $( which cut 2>/dev/null ) ]
 then
-	echo "cut is required."
-	exit 1
+	ferr "cut is required."
 fi
 if [ -z $( which curl 2>/dev/null ) ]
 then
 	echo "curl is required."
-	exit 1
 fi
 if [ -z $( which grep 2>/dev/null ) ]
 then
 	echo "grep is required."
-	exit 1
 fi
 
 if [ -f /opt/elasticbeanstalk/support/envvars ]
@@ -88,8 +89,7 @@ then
     sudo rpm -ivh datadog-${DD_PLATFORM}-tracer.rpm
     rm -f datadog-${DD_PLATFORM}-tracer.rpm
   else
-    echo "Could not download APM agent for this platform."
-    exit 1
+    ferr "Could not download APM agent for this platform."
   fi
 fi
 
