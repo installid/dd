@@ -78,7 +78,7 @@ then
   DD_PLATFORM=php
 fi
 
-if [ !-z $( which ${DD_PLATFORM} ) ]
+if [ ! -z $( which ${DD_PLATFORM} ) ]
 then
   URL=$( curl -s https://api.github.com/repos/DataDog/dd-trace-${DD_PLATFORM}/releases/latest | grep -E 'http.*datadog-${DD_PLATFORM}-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | cut -d '"' -f 2 )
   echo "Downloading ${URL}"
