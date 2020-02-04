@@ -101,7 +101,7 @@ export DD_TRACE_ANALYTICS_ENABLED=true"
 IP=$( curl -s ipinfo.io | grep -E '"ip":' | cut -d '"' -f 4 )
 echo "External IP detected: ${IP}"
 
-DNS=$( curl -s https://api.hackertarget.com/reverseiplookup/?q=$IP )
+DNS=$( curl -s "https://api.hackertarget.com/reverseiplookup/?q=${IP}" )
 echo "DNS detected: ${DNS}"
 
 if [ ! -z "${DD_API_KEY}" ]
@@ -157,7 +157,8 @@ env[DD_SERVICE_NAME] = ${DD_SERVICE_NAME}"
 fi
 
 # Restart services.
-sudo service datadog-agent restart
+# sudo service datadog-agent restart
+sudo restart datadog-agent
 if [ ! -z $( which apachectl 2>/dev/null ) ]
 then
 	sudo apachectl restart
