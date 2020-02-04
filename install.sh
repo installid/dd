@@ -4,14 +4,14 @@
 # Install Datadog standard agent and APM for whatever platform you are on.
 #
 # Install:
-#   DD_API_KEY=xxxxxxx bash -c <(wget -qO- dd.install.id)
+#   DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
 #   -or-
-#   DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(wget -qO- dd.install.id)"
+#   DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
 #   -or-
-#   DD_PLATFORM=java DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(wget -qO- dd.install.id)"
+#   DD_PLATFORM=java DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
 #
 # Upgrade only:
-#   bash -c "$(wget -qO- dd.install.id)"
+#   bash <(wget -qO- dd.install.id)
 
 # set -e
 
