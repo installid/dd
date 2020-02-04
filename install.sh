@@ -112,7 +112,7 @@ rm -f /etc/php.d/newrelic.ini
 # sudo sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
 
 # Shove the variables into FPM.
-if [ if /etc/php-fpm.d/www.conf ]
+if [ -f /etc/php-fpm.d/www.conf ]
 then
   EXPORTSFPM="env[DD_TRACE_CLI_ENABLED] = true
 env[DD_TRACE_ANALYTICS_ENABLED] = true
