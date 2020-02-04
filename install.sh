@@ -39,6 +39,7 @@ function fexit
 	then
 		shred -u "$self"
 	fi
+	cd -
 }
 clear
 trap fdebug DEBUG
@@ -90,7 +91,7 @@ then
     sudo rpm -ivh datadog-${DD_PLATFORM}-tracer.rpm
     rm -f datadog-${DD_PLATFORM}-tracer.rpm
   else
-    ferr "Could not download APM agent for this platform."
+    ferr "Could not download APM agent as datadog-${DD_PLATFORM}-tracer.rpm for this platform."
   fi
 fi
 
