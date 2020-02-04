@@ -130,6 +130,9 @@ grep -qxF "$EXPORTS" /etc/environment || sudo echo -e "${EXPORTS}" >> /etc/envir
 # Enable APM
 sudo sed -i 's/# apm_enabled: false/apm_enabled: true/g' /etc/dd-agent/datadog.conf
 
+# Enable Logs
+sudo sed -i 's/#logs_enabled: false/logs_enabled: true/g' /etc/dd-agent/datadog.conf
+
 # Upgrade DD agent if needed.
 if [ -z "${DD_API_KEY}" ]
 then
