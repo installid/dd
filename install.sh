@@ -45,17 +45,17 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 
 # Check dependencies
-if [ -z $( which cut ) ]
+if [ -z $( which cut 2>/dev/null ) ]
 then
 	echo "cut is required."
 	exit 1
 fi
-if [ -z $( which curl ) ]
+if [ -z $( which curl 2>/dev/null ) ]
 then
 	echo "curl is required."
 	exit 1
 fi
-if [ -z $( which grep ) ]
+if [ -z $( which grep 2>/dev/null ) ]
 then
 	echo "grep is required."
 	exit 1
@@ -78,7 +78,7 @@ then
   DD_PLATFORM=php
 fi
 
-if [ ! -z $( which ${DD_PLATFORM} ) ]
+if [ ! -z $( which ${DD_PLATFORM} 2>/dev/null ) ]
 then
   URL=$( curl -s "https://api.github.com/repos/DataDog/dd-trace-${DD_PLATFORM}/releases/latest" | grep -E "http.*datadog-${DD_PLATFORM}-tracer-.*\.x86_64\.rpm" | cut -d : -f 2,3 | cut -d '"' -f 2 )
   echo "Downloading ${URL}"
@@ -156,7 +156,7 @@ fi
 
 # Restart services.
 sudo service datadog-agent restart
-if [ ! -z $( which apachectl ) ]
+if [ ! -z $( which apachectl 2>/dev/null ) ]
 then
 	sudo apachectl restart
 fi
