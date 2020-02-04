@@ -27,7 +27,7 @@ function ferr
 }
 function fexit
 {
-	if [ $? -neq 0 ]
+	if [ ! $? -eq 0 ]
 	then
 		echo -e "${RED}ERROR: Datadog installation was unable to complete. \"${last_command}\" returned $?.${NC}"
 	fi
