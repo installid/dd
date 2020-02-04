@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
-# ddphp.install.id 1.0.0
+# dd.install.id 1.0.0
 #
-# sudo su
-# bash <(curl -s https://ddphp.install.id)
+# Install Datadog standard agent and APM for whatever platform you are on.
+#
+# Install:
+#   DD_API_KEY=xxxxxxx bash -c "$(curl -L https://dd.install.id)"
+#   -or-
+#   DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(curl -L https://dd.install.id)"
+#   -or-
+#   DD_PLATFORM=java DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(curl -L https://dd.install.id)"
+#
+# Upgrade only:
+#   bash -c "$(curl -L https://dd.install.id)"
 
 # set -e
 
@@ -16,7 +25,7 @@ function fexit
 {
 	if [ ! $? -eq 0 ]
 	then
-		echo -e "${RED}ERROR: Datadog PHP installation was unable to complete. \"${last_command}\" returned $?.${NC}"
+		echo -e "${RED}ERROR: Datadog installation was unable to complete. \"${last_command}\" returned $?.${NC}"
 	fi
 	if [ -d "$tmp" ]
 	then
@@ -64,13 +73,18 @@ then
   export DD_AGENT_MAJOR_VERSION=7
 fi
 
-if [ !-z $( which php ) ]
+if [ -z "${DD_PLATFORM}" ]
 then
-  URL=$( curl -s https://api.github.com/repos/DataDog/dd-trace-php/releases/latest | grep -E 'http.*datadog-php-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | cut -d '"' -f 2 )
+  DD_PLATFORM=php
+fi
+
+if [ !-z $( which ${DD_PLATFORM} ) ]
+then
+  URL=$( curl -s https://api.github.com/repos/DataDog/dd-trace-${DD_PLATFORM}/releases/latest | grep -E 'http.*datadog-${DD_PLATFORM}-tracer-.*\.x86_64\.rpm' | cut -d : -f 2,3 | cut -d '"' -f 2 )
   echo "Downloading ${URL}"
-  curl -s -L -o datadog-php-tracer.rpm "${URL}"
-  sudo rpm -ivh datadog-php-tracer.rpm
-  rm -f datadog-php-tracer.rpm
+  curl -s -L -o datadog-${DD_PLATFORM}-tracer.rpm "${URL}"
+  sudo rpm -ivh datadog-${DD_PLATFORM}-tracer.rpm
+  rm -f datadog-${DD_PLATFORM}-tracer.rpm
 fi
 
 EXPORTS="export DD_TRACE_CLI_ENABLED=true
@@ -105,21 +119,6 @@ grep -qxF "$EXPORTS" /etc/environment || sudo echo -e "${EXPORTS}" >> /etc/envir
 # echo "Contents of /etc/environment:"
 # cat /etc/environment
 
-# Newrelic would compete, kill it.
-rm -f /etc/php.d/newrelic.ini
-
-# Allow env variables to go into PHP-FPM
-# sudo sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
-
-# Shove the variables into FPM.
-if [ -f /etc/php-fpm.d/www.conf ]
-then
-  EXPORTSFPM="env[DD_TRACE_CLI_ENABLED] = true
-env[DD_TRACE_ANALYTICS_ENABLED] = true
-env[DD_SERVICE_NAME] = ${DD_SERVICE_NAME}"
-  grep -qxF "EXPORTSFPM" /etc/php-fpm.d/www.conf || sudo echo -e "${EXPORTSFPM}" >> /etc/php-fpm.d/www.conf
-fi
-
 # Enable APM
 sudo sed -i 's/# apm_enabled: false/apm_enabled: true/g' /etc/dd-agent/datadog.conf
 
@@ -129,8 +128,27 @@ then
   DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 fi
 
+if [ "php" == "${DD_PLATFORM}" ]
+then
+  # PHP specific platform changes.
+  # Newrelic would compete, kill it.
+  rm -f /etc/php.d/newrelic.ini
+
+  # Allow env variables to go into PHP-FPM
+  # sudo sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
+
+  # Shove the variables into FPM.
+  if [ -f /etc/php-fpm.d/www.conf ]
+  then
+    EXPORTSFPM="env[DD_TRACE_CLI_ENABLED] = true
+env[DD_TRACE_ANALYTICS_ENABLED] = true
+env[DD_SERVICE_NAME] = ${DD_SERVICE_NAME}"
+    grep -qxF "EXPORTSFPM" /etc/php-fpm.d/www.conf || sudo echo -e "${EXPORTSFPM}" >> /etc/php-fpm.d/www.conf
+    sudo service php-fpm restart
+  fi
+fi
+
 # Restart services.
 sudo service datadog-agent restart
 sudo apachectl restart
-sudo service php-fpm restart
 sudo service nginx restart
