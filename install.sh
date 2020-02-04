@@ -4,14 +4,14 @@
 # Install Datadog standard agent and APM for whatever platform you are on.
 #
 # Install:
-#   DD_API_KEY=xxxxxxx bash -c "$(curl -L https://dd.install.id)"
+#   DD_API_KEY=xxxxxxx bash -c <(wget -qO- dd.install.id)
 #   -or-
-#   DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(curl -L https://dd.install.id)"
+#   DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(wget -qO- dd.install.id)"
 #   -or-
-#   DD_PLATFORM=java DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(curl -L https://dd.install.id)"
+#   DD_PLATFORM=java DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash -c "$(wget -qO- dd.install.id)"
 #
 # Upgrade only:
-#   bash -c "$(curl -L https://dd.install.id)"
+#   bash -c "$(wget -qO- dd.install.id)"
 
 # set -e
 
@@ -77,6 +77,7 @@ fi
 if [ -z "${DD_PLATFORM}" ]
 then
   DD_PLATFORM=php
+  export DD_PLATFORM=php
 fi
 
 if [ ! -z $( which ${DD_PLATFORM} 2>/dev/null ) ]
