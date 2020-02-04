@@ -150,5 +150,8 @@ fi
 
 # Restart services.
 sudo service datadog-agent restart
-sudo apachectl restart
+if [ ! -z $( which apachectl ) ]
+then
+	sudo apachectl restart
+fi
 sudo service nginx restart
