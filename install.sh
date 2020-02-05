@@ -72,7 +72,7 @@ cd /tmp
 
 if [ ! -z "${DD_AGENT_MAJOR_VERSION}" ]
 then
-  export DD_AGENT_MAJOR_VERSION=7
+  export DD_AGENT_MAJOR_VERSION=6
 fi
 
 if [ -z "${DD_PLATFORM}" ]
@@ -106,7 +106,7 @@ echo "DNS detected: ${DNS}"
 
 if [ ! -z "${DD_API_KEY}" ]
 then
-	DD_AGENT_MAJOR_VERSION=7 bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+	DD_AGENT_MAJOR_VERSION=6 bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 fi
 
 if [ -z "${DD_SERVICE_NAME}" ]
@@ -136,7 +136,7 @@ sudo sed -i 's/#logs_enabled: false/logs_enabled: true/g' /etc/dd-agent/datadog.
 # Upgrade DD agent if needed.
 if [ -z "${DD_API_KEY}" ]
 then
-  DD_AGENT_MAJOR_VERSION=7 DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
+  DD_AGENT_MAJOR_VERSION=6 DD_UPGRADE=true bash -c "$(curl -L https://raw.githubusercontent.com/DataDog/datadog-agent/master/cmd/agent/install_script.sh)"
 fi
 
 if [ "php" == "${DD_PLATFORM}" ]
