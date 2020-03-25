@@ -7,8 +7,10 @@
 #   DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
 #   -or-
 #   DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
-#   -or-
+#   -or (if non default platform is in use)-
 #   DD_PLATFORM=java DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
+#   DD_PLATFORM=rb DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
+#   DD_PLATFORM=php DD_SERVICE_NAME=servicename.com DD_API_KEY=xxxxxxx bash <(wget -qO- dd.install.id)
 #
 # Upgrade only:
 #   bash <(wget -qO- dd.install.id)
@@ -75,13 +77,7 @@ then
   export DD_AGENT_MAJOR_VERSION=6
 fi
 
-if [ -z "${DD_PLATFORM}" ]
-then
-  DD_PLATFORM=php
-  export DD_PLATFORM=php
-fi
-
-if [ ! -z $( which ${DD_PLATFORM} 2>/dev/null ) ]
+if [ ! -z "${DD_PLATFORM}" ]
 then
   URL=$( curl -s "https://api.github.com/repos/DataDog/dd-trace-${DD_PLATFORM}/releases/latest" | grep -E "http.*datadog-${DD_PLATFORM}-tracer-.*\.x86_64\.rpm" | cut -d : -f 2,3 | cut -d '"' -f 2 )
   echo "Downloading ${URL} --> datadog-${DD_PLATFORM}-tracer.rpm"
